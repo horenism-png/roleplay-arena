@@ -203,7 +203,7 @@ export default function App() {
 
     try {
       // Switched to the public gemini-1.5-flash model for use with personal API keys
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
       const payload = {
         contents: apiHistory,
         systemInstruction: { parts: [{ text: systemInstruction }] }
