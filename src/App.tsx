@@ -202,7 +202,8 @@ export default function App() {
     }));
 
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+      // Switched to the public gemini-1.5-flash model for use with personal API keys
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
       const payload = {
         contents: apiHistory,
         systemInstruction: { parts: [{ text: systemInstruction }] }
@@ -215,16 +216,17 @@ export default function App() {
       });
 
       if (!res.ok) {
-        throw new Error(`API Error: ${res.status}`);
+        const errorData = await res.text();
+        throw new Error(`API Error ${res.status}: ${errorData}`);
       }
 
       const data = await res.json();
       const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "The entity remains silent...";
       
       setChatHistory(prev => [...prev, { role: 'model', text: botReply }]);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setError("Failed to connect to the simulation. Please check your API key and try again.");
+      setError(`Connection Failed: ${err.message || "Please check your API key."}`);
     } finally {
       setIsTyping(false);
     }
